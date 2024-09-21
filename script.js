@@ -6,7 +6,6 @@ function addTask() {
     if (newTask.trim() == ""){
         return;
     }
-    localStorage.setItem('task', newTask);
     const taskList = JSON.parse(localStorage.getItem('taskList')) || [];
     taskList.push({ task: newTask, finished: 'false' })
     localStorage.setItem('taskList', JSON.stringify(taskList));

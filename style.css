@@ -6,6 +6,7 @@ body {
 
 main {
     display: flex;
+    flex: 1;
     justify-content: center;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -54,7 +55,7 @@ button:hover {
 }
 
 #to-do-list li {
-    text-align: justify;
+    text-align: left;
 }
 
 #to-do-list input {
@@ -73,6 +74,9 @@ button:hover {
 
 @media (max-width: 450px) {
     #to-do-list {
+        width: 100%;
+    }
+    #to-do-list input {
         width: 100%;
     }
     #to-do-list div {
