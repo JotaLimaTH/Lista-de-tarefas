@@ -10,10 +10,7 @@ function addTask() {
     taskList.push({ task: newTask, finished: 'false' })
     localStorage.setItem('taskList', JSON.stringify(taskList));
     inputTask.value = "";
-    getTasks()
-
-    console.log(newTask);
-    
+    getTasks()    
 }
 
 function getTasks() {
