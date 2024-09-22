@@ -31,10 +31,7 @@ function getTasks() {
 
         li.appendChild(span);
         li.appendChild(buttonDelete);
-
         taskListUl.appendChild(li);
-
-        localStorage.removeItem("task");
     });
 }
 
