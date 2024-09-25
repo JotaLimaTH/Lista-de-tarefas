@@ -25,11 +25,15 @@ function getTasks() {
         const span = document.createElement('span');
         span.innerHTML = task.task;
 
+        const checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+
         const buttonDelete = document.createElement('button');
         buttonDelete.textContent = 'Excluir';
         buttonDelete.addEventListener('click', () => deleteTask(index));
 
         li.appendChild(span);
+        li.appendChild(checkbox);
         li.appendChild(buttonDelete);
         taskListUl.appendChild(li);
     });
@@ -40,5 +44,23 @@ function deleteTask(index) {
     taskList.splice(index, 1);
     localStorage.setItem('taskList', JSON.stringify(taskList));
 
+    getTasks();
+}
+
+function deleteAllTasks() {
+    const taskListUl = document.getElementById("taskList");
+    const taskListLi = taskListUl.querySelectorAll("li");
+    const taskList = JSON.parse(localStorage.getItem("taskList"));
+    let removedCount = 0;
+    
+    taskListLi.forEach((li, index) => {
+        const checkbox = li.querySelector("input[type='checkbox']");
+        if (checkbox.checked){
+            console.log(`Elemento de index ${index} marcado`);
+            taskList.splice(index - removedCount, 1);
+            removedCount++;
+        }
+    })
+    localStorage.setItem("taskList", JSON.stringify(taskList));
     getTasks();
 }

@@ -31,8 +31,6 @@ ul {
 
 button {
     font-family: 'Poppins', 'Helvetica', sans-serif;
-    margin-top: 10px;
-    margin-left: 10px;
     padding: 10px;
     background-color: yellow;
     border: none;
@@ -55,7 +53,15 @@ button:hover {
 }
 
 #to-do-list li {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
     text-align: left;
+    align-items: center;
+}
+
+#to-do-list li > * {
+    margin-left: 10px;
 }
 
 #to-do-list input {
@@ -66,6 +72,11 @@ button:hover {
     border: solid 1px #15854f;
     border-radius: 50px;
     outline: none;
+}
+
+#to-do-list input[type=checkbox]{
+    width: 30px;
+    height: 30px;
 }
 
 #to-do-list input:focus {
