@@ -25,7 +25,7 @@ Trata-se de algo bastante simples. Coloquei tudo dentro de uma tag `main`, e tem
 O código CSS não está especialmente refinado, somente configura as divs para estar com `display: flex`, e para dar alguma aparência. Design de interfaces não é exatamente meu forte! 🤣
 ## Javascript
 Aqui é onde entra a funcionalidade da lista de tarefas.  
-O código possui quatro funções: `addTask()`, `deleteTask(index)`, `deleteAllTasks` e `getTasks()`.
+O código possui cinco funções: `addTask()`, `deleteTask(index)`, `deleteAllTasks()`, `editTask(index)` e `getTasks()`.
 ### addTask()
 ```Javascript
 function addTask() {
@@ -99,6 +99,17 @@ localStorage.setItem("taskList", JSON.stringify(taskList));
 getTasks();
 ```
 O `localStorage` vai definir seu elemento como o nosso `taskList`, já com as devidas alterações. Após isso, chamamos a função `getTasks()`.
+### editTask(index)
+```Javascript
+function editTask(index) {
+    const taskList = JSON.parse(localStorage.getItem("taskList"));
+    const newTask = prompt("Edite a tarefa");
+    taskList[index].task = newTask;
+    localStorage.setItem('taskList', JSON.stringify(taskList));
+    getTasks();
+}
+```
+O código para essa função ainda está rudimentar. Basicamente, vamos transformar o que tá lá no `localStorage` em array de JSON, e vamos declarar a constante `newTask`, que vai ser um prompt. Então, vamos botar a `newTask` como o valor do item com valor do `index` da `taskList`. Então, transformamos a lista atualizada em string novamente e jogamos no `localStorage`. Então chamamos `getTasks()`.
 ### getTasks()
 ```Javascript
 function getTasks() {
@@ -113,16 +124,22 @@ function getTasks() {
         const span = document.createElement('span');
         span.innerHTML = task.task;
 
+        const checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+
         const buttonDelete = document.createElement('button');
         buttonDelete.textContent = 'Excluir';
         buttonDelete.addEventListener('click', () => deleteTask(index));
 
+        const buttonEdit = document.createElement('button');
+        buttonEdit.textContent = "Editar";
+        buttonEdit.addEventListener('click', () => editTask(index));
+
         li.appendChild(span);
+        li.appendChild(checkbox);
         li.appendChild(buttonDelete);
-
+        li.appendChild(buttonEdit);
         taskListUl.appendChild(li);
-
-        localStorage.removeItem("task");
     });
 }
 ```
@@ -136,7 +153,11 @@ const li = document.createElement('li');
 const span = document.createElement('span');
 span.innerHTML = task.task;
 
+const checkbox = document.createElement('input');
+checkbox.type = "checkbox";
+
 const buttonDelete = document.createElement('button');
+const buttonEdit = document.createElement('button');
 ```
 Inclusive, atenção: esse `span` vai receber o atributo task do nosso elemento atual na iteração. Por isso que fica `span.innerHTML = task.task`. Novamente, leitores de CleanCode e discípulos de Uncle Bob, mil perdões!  
 Quanto a esse `buttonDelete`, ele vai receber uma função no onClick.
@@ -145,9 +166,16 @@ buttonDelete.textContent = 'Excluir';
 buttonDelete.addEventListener('click', () => deleteTask(index));
 ```
 Aliás, fica uma dica para os estressados programadores iniciantes: o `addEventListener` vai receber sempre o nome do evento (no caso, um click) e a declaração de uma função anônima (aqui em arrow function, apontando para `deleteTask(index)`). Em hipótese alguma coloque sem ser com função anônima, pois senão essa função vai ser chamada, se colocada com o parâmetro, ou então vai ir para o onClick sem parâmetro. Não diga que eu não avisei quando seu código estiver bugado!  
+`buttonEdit` também vai receber uma função no onClick.
+```Javascript
+buttonEdit.textContent = "Editar";
+buttonEdit.addEventListener('click', () => editTask(index));
+```
 Enfim, por fim, dá um append no seu `li` e no seu `taskListUl`. Teu código tá pronto!
 ```Javascript
 li.appendChild(span);
+li.appendChild(checkbox);
 li.appendChild(buttonDelete);
+li.appendChild(buttonEdit);
 taskListUl.appendChild(li);
 ```

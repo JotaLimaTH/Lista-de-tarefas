@@ -32,9 +32,14 @@ function getTasks() {
         buttonDelete.textContent = 'Excluir';
         buttonDelete.addEventListener('click', () => deleteTask(index));
 
+        const buttonEdit = document.createElement('button');
+        buttonEdit.textContent = "Editar";
+        buttonEdit.addEventListener('click', () => editTask(index));
+
         li.appendChild(span);
         li.appendChild(checkbox);
         li.appendChild(buttonDelete);
+        li.appendChild(buttonEdit);
         taskListUl.appendChild(li);
     });
 }
@@ -61,5 +66,13 @@ function deleteAllTasks() {
         }
     })
     localStorage.setItem("taskList", JSON.stringify(taskList));
+    getTasks();
+}
+
+function editTask(index) {
+    const taskList = JSON.parse(localStorage.getItem("taskList"));
+    const newTask = prompt("Edite a tarefa");
+    taskList[index].task = newTask;
+    localStorage.setItem('taskList', JSON.stringify(taskList));
     getTasks();
 }
