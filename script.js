@@ -56,7 +56,6 @@ function deleteAllTasks() {
     taskListLi.forEach((li, index) => {
         const checkbox = li.querySelector("input[type='checkbox']");
         if (checkbox.checked){
-            console.log(`Elemento de index ${index} marcado`);
             taskList.splice(index - removedCount, 1);
             removedCount++;
         }

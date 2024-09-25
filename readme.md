@@ -25,7 +25,7 @@ Trata-se de algo bastante simples. Coloquei tudo dentro de uma tag `main`, e tem
 O código CSS não está especialmente refinado, somente configura as divs para estar com `display: flex`, e para dar alguma aparência. Design de interfaces não é exatamente meu forte! 🤣
 ## Javascript
 Aqui é onde entra a funcionalidade da lista de tarefas.  
-O código possui três funções: `addTask()`, `deleteTask(index)` e `getTasks()`.
+O código possui quatro funções: `addTask()`, `deleteTask(index)`, `deleteAllTasks` e `getTasks()`.
 ### addTask()
 ```Javascript
 function addTask() {
@@ -62,6 +62,43 @@ function deleteTask(index) {
 }
 ```
 Essa função recebe como parâmetro o index, que vai ser definido na função `getTasks` . Basicamente, vai ser definida a constante `taskList`, que vai fazer a mesma coisa que na outra função. Então, damos um splice no array para deletar o elemento do index. Por fim, setamos para o `localStorage` o array. Então chamamos o `getTasks()`
+### deleteAllTasks()
+```Javascript
+function deleteAllTasks() {
+    const taskListUl = document.getElementById("taskList");
+    const taskListLi = taskListUl.querySelectorAll("li");
+    const taskList = JSON.parse(localStorage.getItem("taskList"));
+    let removedCount = 0;
+    
+    taskListLi.forEach((li, index) => {
+        const checkbox = li.querySelector("input[type='checkbox']");
+        if (checkbox.checked){
+            taskList.splice(index - removedCount, 1);
+            removedCount++;
+        }
+    })
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+    getTasks();
+}
+```
+Essa função vai pegar o elemento de id `taskList` e colocar dentro de uma constante chamada `taskListUl`. Então, como o Javascript vai pegar a tag sem alteração nenhuma, precisamos que os li estejam dispostos em um array. Por isso, para o terror de qualquer um adepto ao código limpo, fazemos um `taskListUl.querySelectorAll("li")` para reunirmos num array todos os li e colocarmos na constante `taskListLi`. Não contente com tudo isso, vamos pegar do localStorage nossa string e tornar num array de JSON e armazenar na constante `taskList`. Haja redundância!
+Vamos declarar uma variável chamada `removedCount`. Veremos para que ela serve.
+Vamos usar um método `forEach((li, index) => ...)` no `taskListLi`. Inclusive, meu caríssimo programador estressado, se você for um cara iniciante, entenda que o `forEach` vai, basicamente, fazer um for dentro do seu array, e o primeiro parâmetro sempre vai ser o valor do elemento atual na iteração e o segundo sempre vai ser o índice dele. Entendido?
+Ok, isso feito, dentro da função que está dentro do forEach, vamos declarar a constante `checkbox`, que vai apontar para o input de tipo checkbox no elemento da iteração da vez.
+Então, vem o seguinte código:
+```Javascript
+if (checkbox.checked){
+    taskList.splice(index - removedCount, 1);
+    removedCount++;
+}
+```
+Isso vai fazer algo bastante simples: se o checkbox estiver marcado, `taskList` vai usar um `splice` no index da vez, para deletar seu elemento. Então, `removedCount` vai incrementar. Se não houver isso, não vai dar o resultado esperado, pois, obviamente, se um elemento da lista for deletado, então os índices de cada elemento também vai ser alterado. Dessa forma, quando colocamos como parâmetro `index - removedCount`, estamos garantindo que o item que vai ser deletado na próxima iteração é exatamente aquele que marcamos.
+Por fim, vem as seguintes linhas de código:
+```Javascript
+localStorage.setItem("taskList", JSON.stringify(taskList));
+getTasks();
+```
+O `localStorage` vai definir seu elemento como o nosso `taskList`, já com as devidas alterações. Após isso, chamamos a função `getTasks()`.
 ### getTasks()
 ```Javascript
 function getTasks() {
@@ -91,7 +128,7 @@ function getTasks() {
 ```
 Aqui é evidentemente o código mais chatinho. Esta aí um bom motivo para se odiar Javascript e DOM, por sinal!  
 Vamos pegar a `ul` do HTML, e criamos a constante `taskListUl`, que vai ficar com seu innerHTML vazio. Então, declaramos `taskList` da mesma forma que nas outras funções, parseando a string no localStorage. Amigo, se você leu Clean Code, peço mil perdões por esses nomes!  
-Agora vamos fazer um `forEach(task, index)`. Inclusive, meu caríssimo programador estressado, se você for um cara iniciante, entenda que o `forEach` vai, basicamente, fazer um for dentro do seu array, e o primeiro parâmetro sempre vai ser o valor do elemento atual na iteração e o segundo sempre vai ser o índice dele. Entendido?  
+Agora vamos fazer outro `forEach(task, index)`.  
 Então, dentro do `forEach`, vamos criar alguns elementos:
 ```Javascript
 const li = document.createElement('li');
